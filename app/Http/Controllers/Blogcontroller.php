@@ -43,7 +43,7 @@ class Blogcontroller extends Controller
      'comment'=>$request->body,
      ]);
      foreach ($catgory_id as $id) {
-         $comment->Categories()->attach($id);
+         $comment->categories()->attach($id);
      }
 
         return redirect()->route('blog.index');
@@ -76,6 +76,7 @@ class Blogcontroller extends Controller
         $comment=Comment::find($id);
         $comment->username=$request->title;
         $comment->comment=$request->body;
+
         foreach ($catgory_id as $id) {
             $comment->categories()->sync($id);
         }
@@ -89,8 +90,9 @@ class Blogcontroller extends Controller
     public function destroy(string $id)
     {
 
-        $comment=Comment::find($id)->delete();
-        $comment->detach();
+        $comment=Comment::find($id);
+        $comment->Categories()->detach();
+        $comment->delete();
         return back();
     }
 }
